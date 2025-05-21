@@ -1,17 +1,7 @@
-import './App.css'
-
 const Header = () => {
   return (
-    <header className='App-header'>
+    <header className='Header'>
       <h2>Business Directory Namibia</h2>
-      <a
-        className="App-link"
-        href="/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Business Directory Namibia
-      </a>
     </header>
   )
 }
