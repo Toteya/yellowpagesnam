@@ -1,0 +1,6 @@
+env/
+venv/
+client/node_modules/
+__pycache__
+.vscode/
+
