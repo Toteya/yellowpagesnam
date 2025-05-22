@@ -2,13 +2,14 @@
 REST API Flask app
 """
 from flask import Flask, jsonify
+from server.api.v1.views import app_views
 
 
 def create_app():
     """ Create a Flask app
     """
     app = Flask(__name__)
-    # app.register_blueprint(app_views, url_prefix='/api/v1')
+    app.register_blueprint(app_views, url_prefix='/api/v1')
     return app
 
 
