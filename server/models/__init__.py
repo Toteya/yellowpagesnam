@@ -9,4 +9,3 @@ PORT = int(environ.get('DIRECTORY_PORT', 27017))
 DB_NAME = environ.get('DIRECTORY_DB')
 
 storage = DBStorage(HOST, PORT, DB_NAME)
-storage.load()
