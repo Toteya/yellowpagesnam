@@ -29,8 +29,13 @@ class DBStorage():
 
         if environ.get('DIRECTORY_ENV') == 'testing':
             print("Testing...")
-            for collection_name in self.__db.list_collection_names():
-                self.__db[collection_name].drop()
+            self.clear()
+    
+    def clear(self):
+        """ Clears the database by dropping all collections
+        """
+        for collection_name in self.__db.list_collection_names():
+            self.__db[collection_name].drop()
     
     def get_collection_name(self, clss):
         """ Returns the collection name for the given class
