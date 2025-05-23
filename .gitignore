@@ -3,4 +3,5 @@ venv/
 client/node_modules/
 __pycache__
 .vscode/
+dev_tools/
 
