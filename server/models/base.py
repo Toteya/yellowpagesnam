@@ -16,7 +16,6 @@ class BaseModel(Document):
     created_at = DateTimeField(default=datetime.now(timezone.utc))
     updated_at = DateTimeField()
 
-
     def save(self, *args, **kwargs):
         """ Save the object to the database
         """
@@ -32,3 +31,14 @@ class BaseModel(Document):
                     setattr(self, key, value)
     
         return super().save(*args, **kwargs)
+    
+    def to_dict(self):
+        """ Convert the object to a dictionary
+        """
+        obj_dict = dict(self.to_mongo())
+        obj_dict['id'] = str(self.id)
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        obj_dict['__class__'] = self.__class__.__name__
+        print(obj_dict)
+        return obj_dict
