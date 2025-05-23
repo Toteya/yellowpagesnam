@@ -1,7 +1,7 @@
 """
 base/parent model
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from mongoengine import Document, StringField, DateTimeField
 from uuid import uuid4
 
@@ -13,18 +13,17 @@ class BaseModel(Document):
     meta = {'abstract': True}
 
     id = StringField(primary_key=True, default=lambda: str(uuid4()))
-    created_at = DateTimeField()
-    updated = DateTimeField()
+    created_at = DateTimeField(default=datetime.now(timezone.utc))
+    updated_at = DateTimeField()
 
-    def __init__(self, *args, **kwargs):
-        """
-        Initialize the base model.
-        """
-        super().__init__(*args, **kwargs)
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at 
 
+    def save(self, *args, **kwargs):
+        """ Save the object to the database
+        """
+        if not self.updated_at:
+            self.updated_at = self.created_at
+        else:
+            self.updated_at = datetime.now(timezone.utc)
         if kwargs:
             for key, value in kwargs.items():
                 if key == '__class__':
@@ -32,8 +31,4 @@ class BaseModel(Document):
                 if hasattr(self, key):
                     setattr(self, key, value)
     
-    def save(self):
-        """ Save the object to the database
-        """
-        self.updated_at = datetime.now()
-        # storage.save()
+        return super().save(*args, **kwargs)
