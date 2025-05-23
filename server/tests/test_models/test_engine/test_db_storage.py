@@ -8,6 +8,11 @@ from server.models.listing import Listing
 class TestDBStorage(TestCase):
     """ Tests the database storage engine DBStorage
     """
+    @classmethod
+    def setUpClass(cls):
+        """ Set up the test class
+        """
+        storage.clear()
 
     def test_db_storage(self):
         """ Test that the storage engine initialises
@@ -26,8 +31,6 @@ class TestDBStorage(TestCase):
         )
         listing1.save()
         listing2.save()
-        # storage.new('listings', listing1)
-        # storage.new('listings', listing2)
 
         listings = storage.all(Listing)
         self.assertEqual(len(listings), 2)
