@@ -23,7 +23,7 @@ class Listing(BaseModel):
 
     name = StringField(max_length=255, required=True)
     category = StringField(max_length=255, required=True)
-    email = EmailField(max_length=255, required=True)
-    website = URLField(max_length=255, required=True)
+    email = EmailField(max_length=255, required=False)
+    website = URLField(max_length=255, required=False)
     phone_number1 = StringField(max_length=60, required=False)
     phone_number2 = StringField(max_length=60, required=False)
