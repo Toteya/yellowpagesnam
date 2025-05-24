@@ -20,8 +20,9 @@ app = create_app()
 def not_found(error):
     """ Handle 404 errors
     """
-    return jsonify({'error': error or 'Not Found'}), 404
+    err_message = error.description if hasattr(error, 'description') else 'Not Found'
+    return jsonify({'error': err_message}), 404
 
 
 if __name__ == '__main__':
-    app.run(port='5001', host='0.0.0.0')
+    app.run(port='5001', host='0.0.0.0', debug=True)
