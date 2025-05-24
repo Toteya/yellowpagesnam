@@ -42,5 +42,4 @@ class BaseModel(Document):
         obj_dict['__class__'] = self.__class__.__name__
         if '_id' in obj_dict:
             del obj_dict['_id']
-        print(obj_dict)
         return obj_dict
