@@ -9,8 +9,7 @@ from server.models.listing import Listing
 
 @app_views.route('/listings', methods=['GET'], strict_slashes=False)
 def get_listings():
-    """
-    Get all listings
+    """ Get all listings
     """
     listings = storage.all(Listing)
     listings = [listing.to_dict() for listing in listings]
@@ -18,10 +17,26 @@ def get_listings():
 
 @app_views.route('/listings/<listing_id>', strict_slashes=False)
 def get_listing(listing_id):
-    """
-    Get a specific listing by ID
+    """ Get a specific listing by ID
     """
     listing = storage.get(Listing, listing_id)
     if not listing:
         abort(404, description="Listing not found")
     return jsonify(listing.to_dict()), 200
+
+@app_views.route('/listings', methods=['POST'], strict_slashes=False)
+def create_listing():
+    """ Create a new directory listing
+    """
+    data = request.get_json(silent=True)
+    if not data:
+        abort(400, description="Not a JSON")
+    
+    required_fields = ['name', 'category']
+    for field in required_fields:
+        if field not in data:
+            abort(400, description=f"Missing {field}")
+
+    listing = Listing(**data)
+    listing.save()
+    return jsonify(listing.to_dict()), 201
