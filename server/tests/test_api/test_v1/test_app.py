@@ -6,8 +6,10 @@ import pytest
 import sys
 from server.api.v1.app import create_app
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 app = create_app()
+app.testing = True
 
 @pytest.fixture
 def client():
