@@ -59,14 +59,6 @@ class DBStorage():
         else:
             return list(clss.objects())
 
-    def new(self, obj):
-        """ Add/Save a new document object to the database
-        Args:
-            obj (object): The MongoDB Document instance to be saved.
-        """
-        if obj:
-            obj.save()
-        
     def get(self, clss=None, id=None):
         """ Returns the object matching the given class and id
         Args:
@@ -79,3 +71,11 @@ class DBStorage():
             return clss.objects.get(id=id)
         except DoesNotExist:
             return None
+
+    def new(self, obj):
+        """ Add/Save a new document object to the database
+        Args:
+            obj (object): The MongoDB Document instance to be saved.
+        """
+        if obj:
+            obj.save()
