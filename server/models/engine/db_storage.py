@@ -72,6 +72,12 @@ class DBStorage():
         except DoesNotExist:
             return None
 
+    def delete(self, obj):
+        """ Delete an object from the database
+        """
+        if obj:
+            obj.delete()
+
     def new(self, obj):
         """ Add/Save a new document object to the database
         Args:
