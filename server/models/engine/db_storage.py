@@ -17,7 +17,10 @@ class DBStorage():
         """ Initialize the MongoDB client and database
         """
         self.__client = MongoClient(host, port)
-        self.__db = self.__client[db_name]
+        try:
+            self.__db = self.__client[db_name]
+        except TypeError as e:
+            raise e('Invalid database name provided. Please check environment setup/configuration.')
 
         connect(
             db=db_name,
