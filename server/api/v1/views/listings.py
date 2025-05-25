@@ -12,6 +12,7 @@ def get_listings():
     """ Get all listings
     """
     listings = storage.all(Listing)
+    listings = sorted(listings, key=lambda x: x.name)
     listings = [listing.to_dict() for listing in listings]
     return jsonify(listings), 200
 
