@@ -8,27 +8,33 @@ from test_app import client
 
 
 @pytest.fixture
-def sample_listing():
+def sample_listings():
     """Fixture to create a sample listing."""
-    listing = Listing(name="Test Listing", category="Test Category")
-    listing.save()
-    return listing
+    listing1 = Listing(name="Test Listing", category="Test Category")
+    listing1.save()
+    listing2 = Listing(id='5fbb6d0a-cd33', name="Another Listing", category="Another Category")
+    listing2.save()
+    yield [listing1, listing2]
+    storage.delete(listing1)
+    storage.delete(listing2)
 
-def test_get_listings(client, sample_listing):
+def test_get_listings(client, sample_listings):
     """Test retrieving all listings."""
     response = client.get('/api/v1/listings')
     assert response.status_code == 200
     data = response.get_json()
     assert isinstance(data, list)
-    assert any(item["id"] == sample_listing.id for item in data)
+    for listing in sample_listings:
+        assert any(item["id"] == listing.id for item in data)
 
-def test_get_listing_success(client, sample_listing):
+def test_get_listing_success(client, sample_listings):
     """Test retrieving a specific listing by ID."""
-    response = client.get(f'/api/v1/listings/{sample_listing.id}')
+    listing = sample_listings[0]
+    response = client.get(f'/api/v1/listings/{listing.id}')
     assert response.status_code == 200
     data = response.get_json()
-    assert data["id"] == sample_listing.id
-    assert data["name"] == sample_listing.name
+    assert data["id"] == listing.id
+    assert data["name"] == listing.name
 
 def test_get_listing_not_found(client):
     """Test retrieving a non-existent listing."""
@@ -70,3 +76,6 @@ def test_create_listing(client):
     response = client.post('/api/v1/listings', data="Not a JSON")
     assert response.status_code == 400
     assert b"Not a JSON" in response.data
+
+
+
