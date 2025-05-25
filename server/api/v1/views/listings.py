@@ -40,3 +40,14 @@ def create_listing():
     listing = Listing(**data)
     listing.save()
     return jsonify(listing.to_dict()), 201
+
+@app_views.route('/listings/<listing_id>', methods=['DELETE'], strict_slashes=False)
+def delete_listing(listing_id):
+    """ Delete a directory listing
+    """
+    listing = storage.get(Listing, listing_id)
+    if not listing:
+        abort(404, description="Listing not found")
+
+    storage.delete(listing)
+    return jsonify({'Deleted': f'Listing {listing.name}'}), 200
