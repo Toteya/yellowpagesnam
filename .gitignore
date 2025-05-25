@@ -5,4 +5,5 @@ __pycache__
 .vscode/
 dev_tools/
 insert.sh
+.pytest_cache
 
