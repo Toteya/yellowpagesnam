@@ -77,5 +77,19 @@ def test_create_listing(client):
     assert response.status_code == 400
     assert b"Not a JSON" in response.data
 
+def test_delete_listing(client, sample_listings):
+    """Test deleting a listing."""
+    listing = sample_listings[0]
+    response = client.delete(f'/api/v1/listings/{listing.id}')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['Deleted'] == f'Listing {listing.name}'
 
+    # Verify deletion
+    deleted_listing = storage.get(Listing, listing.id)
+    assert deleted_listing is None
 
+    # Attempt to delete a non-existent listing
+    response = client.delete('/api/v1/listings/nonexistent-id')
+    assert response.status_code == 404
+    assert b'Listing not found' in response.data
