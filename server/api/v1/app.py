@@ -2,6 +2,7 @@
 REST API Flask app
 """
 from flask import Flask, jsonify
+from flask_cors import CORS
 from server.api.v1.views import app_views
 
 
@@ -14,6 +15,7 @@ def create_app():
 
 
 app = create_app()
+CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 @app.errorhandler(404)
