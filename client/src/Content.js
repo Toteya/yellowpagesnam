@@ -3,7 +3,7 @@ import ListItem from './ListItem';
 
 const Content = ({ listings }) => {
   return (
-    <div>
+    <div className="Content">
       <h2>Welcome to the Business Directory Namibia</h2>
       <ul>
         {listings.map((listing) => (
