@@ -1,4 +1,4 @@
-import './Content.css';
+import './Content.module.css';
 import ListItem from './ListItem';
 import ListPane from './ListPane';
 import ViewPane from './ViewPane';

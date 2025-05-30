@@ -1,4 +1,4 @@
-import './Nav.css';
+import './Nav.module.css';
 // import { Link } from 'react-router-dom';
 import Link from 'next/link';
 
