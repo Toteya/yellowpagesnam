@@ -3,11 +3,14 @@ import ListItem from './ListItem';
 import ListPane from './ListPane';
 import ViewPane from './ViewPane';
 
-const Content = ({ listings }) => {
+const Content = ({ listings, viewContent, setViewContent }) => {
   return (
     <div className="flex h-screen">
-      <ListPane listings={listings} />
-      <ViewPane />
+      <ListPane
+        listings={listings}
+        setViewContent={setViewContent}
+      />
+      <ViewPane viewContent={viewContent}/>
     </div>
   )
 }

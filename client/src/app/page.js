@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const [listings, setListings] = useState([]);
   const [fetchError, setFetchError] = useState(null);
+  const [viewContent, setViewContent] = useState('Select a business to see more information about it.');
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -36,7 +37,13 @@ export default function Home() {
       <Nav />
       <main>
         {fetchError && <p style={{color: 'red'}}>{fetchError}</p>}
-        {!fetchError && <Content listings={listings} />}
+        {!fetchError && (
+          <Content
+            listings={listings}
+            viewContent={viewContent}
+            setViewContent={setViewContent}
+          />
+        )}
       </main>
     </div>
   );
