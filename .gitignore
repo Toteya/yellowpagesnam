@@ -6,4 +6,3 @@ __pycache__
 dev_tools/
 insert.sh
 .pytest_cache
-
