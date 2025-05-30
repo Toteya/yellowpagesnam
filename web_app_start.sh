@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-npm --prefix client start
+npm --prefix client run dev
