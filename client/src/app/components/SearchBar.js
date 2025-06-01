@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Searchbar = () => {
+const SearchBar = () => {
   return (
     <nav>Searchbar</nav>
   )
 }
 
-export default Searchbar
+export default SearchBar
