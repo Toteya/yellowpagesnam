@@ -4,6 +4,7 @@ const ListPane = ({ listings, setViewContent }) => {
   const handleClick = (listing) => {
     setViewContent(listing.name);
   }
+
   return (
     <div className="w-1/2 p-4 bg-gray-100 border-r overflow-y-scroll">
       <ul>
@@ -18,6 +19,5 @@ const ListPane = ({ listings, setViewContent }) => {
     </div>
   )
 }
-
 
 export default ListPane

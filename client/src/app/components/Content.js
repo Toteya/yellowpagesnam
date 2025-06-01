@@ -5,7 +5,7 @@ import ViewPane from './ViewPane';
 
 const Content = ({ listings, viewContent, setViewContent }) => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen mt-1">
       <ListPane
         listings={listings}
         setViewContent={setViewContent}
