@@ -9,10 +9,13 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const [listings, setListings] = useState([]);
   const [fetchError, setFetchError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [viewContent, setViewContent] = useState('Select a business to see more information about it.');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchListings = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('http://localhost:5001/api/v1/listings');
         if (!response.ok) {
@@ -24,6 +27,8 @@ export default function Home() {
       } catch (error) {
         setFetchError('Failed to fetch data. Please try again later.');
         console.error('Error fetching listings:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -31,15 +36,21 @@ export default function Home() {
     
   }, []);
 
+  const filteredListings = listings.filter((listing) =>
+    listing.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    listing.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="App">
       <Header />
-      <Nav />
+      <Nav setSearchQuery={setSearchQuery}/>
       <main>
-        {fetchError && <p style={{color: 'red'}}>{fetchError}</p>}
-        {!fetchError && (
+        {isLoading && <p>Loading...</p>}
+        {!isLoading && fetchError && <p style={{color: 'red'}}>{fetchError}</p>}
+        {!isLoading && !fetchError && (
           <Content
-            listings={listings}
+            listings={filteredListings}
             viewContent={viewContent}
             setViewContent={setViewContent}
           />

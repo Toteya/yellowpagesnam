@@ -1,7 +1,7 @@
 import NavLink from './NavLink';
 import SearchBar from './SearchBar';
 
-const Nav = () => {
+const Nav = ({ setSearchQuery }) => {
   return (
     <nav className="w-full bg-slate-800 text-white flex items-center justify-between sticky top-0 z-50">
       <ul className="flex space-x-2 pl-2">
@@ -13,7 +13,7 @@ const Nav = () => {
           text="About"
           href="/about"
         />
-        <SearchBar />
+        <SearchBar setSearchQuery={setSearchQuery}/>
       </ul>
     </nav>
   );
