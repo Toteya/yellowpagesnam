@@ -10,7 +10,7 @@ export default function Home() {
   const [listings, setListings] = useState([]);
   const [fetchError, setFetchError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [viewContent, setViewContent] = useState('Select a business to see more information about it.');
+  const [currentListing, setCurrentListing] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -51,8 +51,8 @@ export default function Home() {
         {!isLoading && !fetchError && (
           <Content
             listings={filteredListings}
-            viewContent={viewContent}
-            setViewContent={setViewContent}
+            currentListing={currentListing}
+            setCurrentListing={setCurrentListing}
           />
         )}
       </main>

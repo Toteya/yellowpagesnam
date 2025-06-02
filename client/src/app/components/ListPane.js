@@ -1,8 +1,8 @@
 import ListItem from "./ListItem"
 
-const ListPane = ({ listings, setViewContent }) => {
+const ListPane = ({ listings, setCurrentListing }) => {
   const handleClick = (listing) => {
-    setViewContent(listing.name);
+    setCurrentListing(listing);
   }
 
   return (
