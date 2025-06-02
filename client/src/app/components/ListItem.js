@@ -8,9 +8,6 @@ const ListItem = ({ listing, handleClick }) => {
         {listing.name}
       </h3>
       <p>{listing.category}</p>
-      <p className="text-sm">{listing.email}</p>
-      <p className="text-sm">{listing.website}</p>
-      <p className="text-sm">{listing.phone_number1}</p>
     </li>
   );
 };
