@@ -5,11 +5,12 @@ import Header from './components/Header';
 import Nav from './components/Nav';
 import Content from './components/Content';
 import { useEffect, useState } from 'react';
+import { ImSpinner } from 'react-icons/im';
 
 export default function Home() {
   const [listings, setListings] = useState([]);
   const [fetchError, setFetchError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentListing, setCurrentListing] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -46,7 +47,13 @@ export default function Home() {
       <Header />
       <Nav setSearchQuery={setSearchQuery}/>
       <main>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && (
+          <div className='flex items-center justify-center h-screen'>
+            <p className='flex items-center text-gray-600'>
+              <ImSpinner className="animate-spin mr-2" />
+            </p>
+          </div>
+        )}
         {!isLoading && fetchError && <p style={{color: 'red'}}>{fetchError}</p>}
         {!isLoading && !fetchError && (
           <Content
