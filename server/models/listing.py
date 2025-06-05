@@ -1,7 +1,7 @@
 """
 Directory listing implementation
 """
-from mongoengine import StringField, EmailField, URLField
+from mongoengine import StringField, EmailField, ListField, PointField
 from server.models.base import BaseModel
 
 
@@ -16,14 +16,14 @@ class Listing(BaseModel):
             'category',
             'email',
             'website',
-            'phone_number1',
-            'phone_number2'
+            'location',
+            'phone_numbers',
         ]
     }
 
     name = StringField(max_length=255, required=True)
     category = StringField(max_length=255, required=True)
     email = EmailField(max_length=255, required=False)
-    website = URLField(max_length=255, required=False)
-    phone_number1 = StringField(max_length=60, required=False)
-    phone_number2 = StringField(max_length=60, required=False)
+    website = StringField(max_length=255, required=False)
+    location = PointField(required=False)  # GeoJSON point for location
+    phone_numbers = ListField(StringField(max_length=60), required=False)
