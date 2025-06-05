@@ -2,9 +2,11 @@
 REST API endpoints for listings
 """
 from flask import abort, jsonify, request
+from mongoengine.errors import FieldDoesNotExist
 from server.api.v1.views import app_views
 from server.models import storage
 from server.models.listing import Listing
+
 
 
 @app_views.route('/listings', methods=['GET'], strict_slashes=False)
@@ -38,7 +40,11 @@ def create_listing():
         if field not in data:
             abort(400, description=f"Missing {field}")
 
-    listing = Listing(**data)
+    try:
+        listing = Listing(**data)
+    except FieldDoesNotExist as e:
+        print(f"FieldDoesNotExist Exception: {e}")
+        abort(400, description=f"Invalid field: {e}")
     listing.save()
     return jsonify(listing.to_dict()), 201
 
