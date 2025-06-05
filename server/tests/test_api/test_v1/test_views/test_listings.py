@@ -50,8 +50,7 @@ def test_create_listing(client):
         "category": "Test Category",
         "email": "test@example.com",
         "website": "https://example.com",
-        "phone_number1": "1234567890",
-        "phone_number2": "0987654321"
+        "phone_numbers": ["1234567890", "0987654321"]
     }
     response = client.post('/api/v1/listings', json=valid_data)
     assert response.status_code == 201
