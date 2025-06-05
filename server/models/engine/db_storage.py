@@ -1,9 +1,11 @@
 """
 Mongo Database storage implementation
 """
-from mongoengine import connect, DoesNotExist
+from mongoengine import connect, Document, DoesNotExist
 from os import environ
 from pymongo import MongoClient
+from server.models.listing import Listing
+
 
 
 class DBStorage():
@@ -12,6 +14,8 @@ class DBStorage():
     """
     __client = None
     __db = None
+    __registered_classes = [Listing]  # List of registered MongoEngine model classes
+
 
     def __init__(self, host, port, db_name):
         """ Initialize the MongoDB client and database
@@ -37,8 +41,10 @@ class DBStorage():
     def clear(self):
         """ Clears the database by dropping all collections
         """
-        for collection_name in self.__db.list_collection_names():
-            self.__db[collection_name].drop()
+        # for collection_name in self.__db.list_collection_names():
+        #     self.__db[collection_name].drop()
+        self.__client.drop_database(self.__db.name)
+        self.__db = self.__client[self.__db.name]  # Reinitialize the db after drop
     
     def get_collection_name(self, clss):
         """ Returns the collection name for the given class
@@ -56,11 +62,17 @@ class DBStorage():
         Returns:
             list: A list of objects retrieved from the database.
         """
-        # if clss is not None and clss.__name__ not in self.__db.list_collection_names():
-        if not clss:
-            raise ValueError(f"Class {clss.__name__} does not exist in the database.")
-        else:
-            return list(clss.objects())
+        if clss is None:
+            all_objects = []
+            for model_class in self.__registered_classes:
+                all_objects.extend(model_class.objects())
+            return all_objects
+
+        if not issubclass(clss, Document):
+            raise ValueError(f"The provided class '{clss}' is not a valid MongoEngine model class.")
+        
+        return list(clss.objects())
+    
 
     def get(self, clss=None, id=None):
         """ Returns the object matching the given class and id
