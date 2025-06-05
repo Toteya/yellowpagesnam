@@ -50,7 +50,7 @@ export default function Home() {
         {isLoading && (
           <div className='flex items-center justify-center h-screen'>
             <p className='flex items-center text-gray-600'>
-              <ImSpinner className="animate-spin mr-2" />
+              <ImSpinner className="animate-spin text-3xl" />
             </p>
           </div>
         )}
