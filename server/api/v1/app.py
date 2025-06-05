@@ -25,6 +25,20 @@ def not_found(error):
     err_message = error.description if hasattr(error, 'description') else 'Not Found'
     return jsonify({'error': err_message}), 404
 
+@app.errorhandler(400)
+def bad_request(error):
+    """ Handle 400 errors
+    """
+    err_message = error.description if hasattr(error, 'description') else 'Bad Request'
+    return jsonify({'error': err_message}), 400
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    """ Handle 500 errors
+    """
+    err_message = error.description if hasattr(error, 'description') else 'Internal Server Error'
+    return jsonify({'error': err_message}), 500
 
 if __name__ == '__main__':
     app.run(port='5001', host='0.0.0.0', debug=True)
