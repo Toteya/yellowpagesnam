@@ -39,7 +39,7 @@ class DBStorage():
             self.clear()
     
     def clear(self):
-        """ Clears the database by dropping all collections
+        """ Clears the database by dropping the entire database
         """
         self.__client.drop_database(self.__db.name)
         self.__db = self.__client[self.__db.name]  # Reinitialize the db after drop
