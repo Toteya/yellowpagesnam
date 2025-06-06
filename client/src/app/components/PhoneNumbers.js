@@ -7,15 +7,18 @@ const PhoneNumbers = ({ phoneNumbers }) => {
   const displayedNumbers = showAll ? phoneNumbers : phoneNumbers.slice(0, 2);
 
   return (
-    <p className='m-2 flex items-center gap-2'>
+    <p className='m-2 flex flex-wrap items-center gap-2'>
       <FaPhone />
       {!phoneNumbers?.length && 'No phone number available'}
       {phoneNumbers?.length > 0 && (
-        <>
+        <span className='flex flex-wrap gap-1'>
           {displayedNumbers.map((phone, index) => (
-            <span key={index}>
-              {phone}
-              {index < displayedNumbers.length - 1 ? ', ' : ''}
+            <span 
+              key={index}
+              className='break-words'
+            >
+                {phone}
+                {index < displayedNumbers.length - 1 ? ', ' : ''}
             </span>
           ))}
           {phoneNumbers.length > 2 && !showAll && (
@@ -34,7 +37,7 @@ const PhoneNumbers = ({ phoneNumbers }) => {
               Show less
             </button>
           )}
-        </>
+        </span>
       )}
     </p>
   );
