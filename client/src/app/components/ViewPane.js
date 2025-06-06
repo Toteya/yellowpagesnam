@@ -2,6 +2,7 @@ import { FaPhone } from 'react-icons/fa6';
 import { MdMail } from 'react-icons/md';
 import { FaGlobeAfrica as FaGlobe } from 'react-icons/fa';
 import MapLocation from './MapLocation';
+import PhoneNumbers from './PhoneNumbers';
 
 const ViewPane = ({ currentListing: listing }) => {
   return (
@@ -20,10 +21,7 @@ const ViewPane = ({ currentListing: listing }) => {
             <FaGlobe />
             {listing.website}
           </p>
-          <p className='m-2 flex items-center gap-2'>
-            <FaPhone />
-            {listing.phone_numbers[0] || 'No phone number available'}
-          </p>
+          <PhoneNumbers phoneNumbers={listing.phone_numbers} />
           {listing.location && (
             <MapLocation
               lat={listing.latitude}
