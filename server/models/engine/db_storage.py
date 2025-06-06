@@ -7,7 +7,6 @@ from pymongo import MongoClient
 from server.models.listing import Listing
 
 
-
 class DBStorage():
     """
     MongoDB storage engine
@@ -43,14 +42,6 @@ class DBStorage():
         """
         self.__client.drop_database(self.__db.name)
         self.__db = self.__client[self.__db.name]  # Reinitialize the db after drop
-    
-    def get_collection_name(self, clss):
-        """ Returns the collection name for the given class
-        """
-        collections = {
-            'Listing': 'listings'
-        }
-        return collections.get(clss.__name__)
     
     def all(self, clss=None):
         """ Retrieves all objects for the given class. Or returns all objects
