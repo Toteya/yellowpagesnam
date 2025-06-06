@@ -75,6 +75,22 @@ class DBStorage():
             return clss.objects.get(id=id)
         except DoesNotExist:
             return None
+    
+    def get_by_filter(self, clss=None, **kwargs):
+        """ Returns the object matching the given class and filter criteria
+        Args:
+            clss (class): The class of the object to retrieve.
+            **kwargs: Filter criteria as keyword arguments.
+        """
+        if not clss:
+            return None
+        if not issubclass(clss, Document):
+            raise ValueError(f"The provided class '{clss}' is not a valid MongoEngine model class.")
+        
+        try:
+            return clss.objects.get(**kwargs)
+        except DoesNotExist:
+            return None        
 
     def delete(self, obj):
         """ Delete an object from the database
