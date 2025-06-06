@@ -4,6 +4,7 @@ const MapLocation = ({ latitude, longitude }) => {
   // const mapSrc = `https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${latitude},${longitude}&zoom=14`;
   return (
     <iframe
+      className="m-2"
       src={mapSrc}
       width="400"
       height="300"
