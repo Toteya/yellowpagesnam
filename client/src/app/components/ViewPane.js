@@ -17,10 +17,19 @@ const ViewPane = ({ currentListing: listing }) => {
             <MdMail />
             {listing.email}
           </p>
-          <p className='m-2 flex items-center gap-2'>
-            <FaGlobe />
-            {listing.website}
-          </p>
+          {listing.website && (
+            <p className="m-2 flex items-center gap-2">
+              <FaGlobe />
+              <a
+                href={listing.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline hover:text-blue-700"
+              >
+                {listing.website}
+              </a>
+            </p>
+          )}
           <PhoneNumbers phoneNumbers={listing.phone_numbers} />
           {listing.location && (
             <MapLocation
