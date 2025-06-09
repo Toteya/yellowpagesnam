@@ -92,3 +92,41 @@ def test_delete_listing(client, sample_listings):
     response = client.delete('/api/v1/listings/nonexistent-id')
     assert response.status_code == 404
     assert b'Listing not found' in response.data
+
+def test_add_photo(client, sample_listings):
+    """Test the add_photo endpoint with various scenarios."""
+    
+    # Test adding a photo successfully
+    # ---------------------------------
+    listing = sample_listings[0]
+    valid_data = {"filename": "photo1.jpg"}
+
+    response = client.post(f'/api/v1/listings/{listing.id}/photos', json=valid_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "photos" in data
+    assert any(valid_data["filename"] in photo for photo in data["photos"])
+
+    # Verify the photo was saved to the database
+    updated_listing = storage.get(Listing, listing.id)
+    assert any(valid_data["filename"] in photo for photo in updated_listing.photos)
+
+    # Test adding a photo with missing filename
+    # -----------------------------------------
+    invalid_data = {}
+
+    response = client.post(f'/api/v1/listings/{listing.id}/photos', json=invalid_data)
+    assert response.status_code == 400
+    assert b"Missing filename" in response.data
+
+    # Test adding a photo with invalid JSON
+    # -------------------------------------
+    response = client.post(f'/api/v1/listings/{listing.id}/photos', data="Not a JSON")
+    assert response.status_code == 400
+    assert b"Not a JSON" in response.data
+
+    # Test adding a photo to a non-existent listing
+    # ---------------------------------------------
+    response = client.post('/api/v1/listings/nonexistent-id/photos', json={"filename": "photo1.jpg"})
+    assert response.status_code == 404
+    assert b"Listing not found" in response.data
