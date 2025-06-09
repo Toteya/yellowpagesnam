@@ -32,7 +32,7 @@ def create_listing():
     """ Create a new directory listing
     """
     data = request.get_json(silent=True)
-    if not data:
+    if data is None:
         abort(400, description="Not a JSON")
     
     required_fields = ['name', 'category']
@@ -58,3 +58,22 @@ def delete_listing(listing_id):
 
     storage.delete(listing)
     return jsonify({'Deleted': f'Listing {listing.name}'}), 200
+
+@app_views.route('/listings/<listing_id>/photos', methods=['POST'], strict_slashes=False)
+def add_photo(listing_id):
+    """ Add a photo to the listing
+    """
+    listing = storage.get(Listing, listing_id)
+    if not listing:
+        abort(404, description='Listing not found')
+    
+    data = request.get_json(silent=True)
+    if data is None:
+        abort(400, description='Not a JSON')
+    filename = data.get('filename')
+    if not filename:
+        abort(400, description='Missing filename')
+
+    listing.add_photo(filename)
+    listing.save()
+    return jsonify(listing.to_dict()), 200
