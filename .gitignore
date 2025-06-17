@@ -7,3 +7,5 @@ dev_tools/
 insert.sh
 add_listings.sh
 .pytest_cache
+client/src/public
+dev_init.sh
