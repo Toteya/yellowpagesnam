@@ -7,7 +7,7 @@ import MediaCarousel from './MediaCarousel';
 
 const ViewPane = ({ currentListing: listing }) => {
   return (
-    <div className="w-auto p-2">
+    <div className="w-full p-2">
       {listing ? (
         <div className="w-full h-96">
           <h3 className="m-2 font-semibold group-hover:text-blue-600 group-focus:text-blue-600">
