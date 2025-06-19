@@ -3,6 +3,7 @@ import { MdMail } from 'react-icons/md';
 import { FaGlobeAfrica as FaGlobe } from 'react-icons/fa';
 import MapLocation from './MapLocation';
 import PhoneNumbers from './PhoneNumbers';
+import MediaCarousel from './MediaCarousel';
 
 const ViewPane = ({ currentListing: listing }) => {
   return (
@@ -37,6 +38,7 @@ const ViewPane = ({ currentListing: listing }) => {
               lng={listing.longitude}
             />
           )}
+          <MediaCarousel />
         </div>
       ) : (
         <p className="m-2 italic text-gray-500">Select a business for more information</p>
