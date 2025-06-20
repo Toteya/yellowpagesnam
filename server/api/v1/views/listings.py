@@ -60,7 +60,7 @@ def delete_listing(listing_id):
     return jsonify({'Deleted': f'Listing {listing.name}'}), 200
 
 @app_views.route('/listings/<listing_id>/photos', methods=['POST'], strict_slashes=False)
-def add_photo(listing_id):
+def add_media(listing_id):
     """ Add a photo to the listing
     """
     listing = storage.get(Listing, listing_id)
@@ -73,7 +73,21 @@ def add_photo(listing_id):
     filename = data.get('filename')
     if not filename:
         abort(400, description='Missing filename')
+    try:
+        listing.add_media(filename)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        if "directory" in str(e):
+            # Media directory is missing
+            abort(500)
+        else:
+            # File is missing
+            abort(404, description='File not found')
+    except ValueError:
+        abort(400, description='Invalid file format')
+    except EnvironmentError as e:
+        print(f'Error: {e}')
+        abort(500)
 
-    listing.add_photo(filename)
     listing.save()
     return jsonify(listing.to_dict()), 200
