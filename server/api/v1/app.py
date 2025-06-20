@@ -37,7 +37,11 @@ def bad_request(error):
 def internal_server_error(error):
     """ Handle 500 errors
     """
-    err_message = error.description if hasattr(error, 'description') else 'Internal Server Error'
+    if hasattr(error, 'description'):
+        err_message = error.description 
+    else:
+        err_message = 'Internal Server Error. Please try again later.'
+
     return jsonify({'error': err_message}), 500
 
 if __name__ == '__main__':
