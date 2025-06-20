@@ -58,7 +58,7 @@ class Listing(BaseModel):
             raise FileNotFoundError(f"The file {filename} does not exist in the media folder.")
 
         # copy file to the dedicated folder
-        if not filename.lower().endswith(tuple(accepted_image_formats)):
+        if filename.lower().endswith(tuple(accepted_image_formats)):
             type = 'photos'
         else:
             type = 'videos'
@@ -67,9 +67,10 @@ class Listing(BaseModel):
         dst_subfolder = f'{self.id}/{type}'
 
         try:
-            os.mkdir(f'{media_dirpath}/{dst_subfolder}')
-        except FileExistsError:
-            pass
+            os.makedirs(f'{media_dirpath}/{dst_subfolder}', exist_ok=True)
+        except Exception as e:
+            print(f"Error creating directory {media_dirpath}/{dst_subfolder}: {e}")
+            raise
         
         dst_filepath = f'{dst_subfolder}/{filename}'
         shutil.copy(scr_filepath, f'{media_dirpath}/{dst_filepath}')
