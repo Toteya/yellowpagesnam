@@ -111,7 +111,7 @@ def test_add_media_success(client, sample_listings, monkeypatch):
 
     monkeypatch.setattr("os.path.exists", mock_exists)
     monkeypatch.setattr("shutil.copy", mock_copy)
-    monkeypatch.setattr("os.mkdir", lambda path: None)
+    monkeypatch.setattr("os.makedirs", lambda path: None)
 
     # Mock file in media directory
     filename = "test_image.jpg"
