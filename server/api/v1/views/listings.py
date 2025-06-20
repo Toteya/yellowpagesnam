@@ -76,18 +76,10 @@ def add_media(listing_id):
     try:
         listing.add_media(filename)
     except FileNotFoundError as e:
-        print(f"Error: {e}")
-        if "directory" in str(e):
-            # Media directory is missing
-            abort(500)
-        else:
-            # File is missing
-            abort(404, description='File not found')
+        abort(404, description='File not found')
     except ValueError:
         abort(400, description='Invalid file format')
-    except EnvironmentError as e:
-        print(f'Error: {e}')
-        abort(500)
+    # Add a logger to log the either internal errors (e.g. EnvironmentError)
 
     listing.save()
     return jsonify(listing.to_dict()), 200
