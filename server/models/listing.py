@@ -3,6 +3,8 @@ Directory listing implementation
 """
 from mongoengine import DictField, EmailField, IntField, ListField, PointField, StringField
 from server.models.base import BaseModel
+import os
+import shutil
 
 
 class Listing(BaseModel):
@@ -33,9 +35,43 @@ class Listing(BaseModel):
     likes = IntField(default=0, required=False)
     reviews = ListField(DictField(), default=list, required=False)
 
-    def add_photo(self, filename):
+    def add_media(self, filename):
         """ Adds a photo to the listing
         """
-        dirpath = 'photos'
-        filepath = f'{dirpath}/{self.id}/{filename}'
-        self.photos.append(filepath)
+        accepted_video_formats = ['.mp4', '.mov', '.webm', '.ogg']
+        accepted_image_formats = ['.jpg', '.jpeg', '.png', '.gif']
+
+        # check if file format is acceptable
+        if not filename.lower().endswith(tuple(accepted_video_formats + accepted_image_formats)):
+            raise ValueError("Invalid file format. Only images and videos are allowed.")
+
+        media_dirpath = os.environ.get('DIRECTORY_MEDIA_DIRPATH')
+        if not media_dirpath:
+            raise EnvironmentError("DIRECTORY_MEDIA_DIRPATH environment variable is not set.")
+        if not os.path.exists(media_dirpath):
+            print(f"Directory {media_dirpath} does not exist.")
+            raise FileNotFoundError(f"The directory {media_dirpath} does not exist.")
+
+        # check if file exists in the general media folder
+        scr_filepath = f'{media_dirpath}/all/{filename}'
+        if not os.path.exists(scr_filepath):
+            raise FileNotFoundError(f"The file {filename} does not exist in the media folder.")
+
+        # copy file to the dedicated folder
+        if not filename.lower().endswith(tuple(accepted_image_formats)):
+            type = 'photos'
+        else:
+            type = 'videos'
+ 
+        # create a subfolder for the listing if it doesn't already exist
+        dst_subfolder = f'{self.id}/{type}'
+
+        try:
+            os.mkdir(f'{media_dirpath}/{dst_subfolder}')
+        except FileExistsError:
+            pass
+        
+        dst_filepath = f'{dst_subfolder}/{filename}'
+        shutil.copy(scr_filepath, f'{media_dirpath}/{dst_filepath}')
+
+        self.photos.append(dst_filepath)
