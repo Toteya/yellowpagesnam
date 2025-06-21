@@ -59,9 +59,9 @@ def delete_listing(listing_id):
     storage.delete(listing)
     return jsonify({'Deleted': f'Listing {listing.name}'}), 200
 
-@app_views.route('/listings/<listing_id>/photos', methods=['POST'], strict_slashes=False)
+@app_views.route('/listings/<listing_id>/media', methods=['POST'], strict_slashes=False)
 def add_media(listing_id):
-    """ Add a photo to the listing
+    """ Add a media object (i.e. photo or video) to the listing
     """
     listing = storage.get(Listing, listing_id)
     if not listing:

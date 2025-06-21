@@ -111,25 +111,24 @@ def test_add_media_success(client, sample_listings, monkeypatch):
 
     monkeypatch.setattr("os.path.exists", mock_exists)
     monkeypatch.setattr("shutil.copy", mock_copy)
-    monkeypatch.setattr("os.makedirs", lambda path: None)
+    monkeypatch.setattr("os.makedirs", lambda path, exist_ok=False: None)
 
     # Mock file in media directory
     filename = "test_image.jpg"
 
-    # Add media to listing
     response = client.post(
-        f"/api/v1/listings/{listing.id}/photos",
+        f"/api/v1/listings/{listing.id}/media",
         json={"filename": filename},
     )
     assert response.status_code == 200
     data = response.get_json()
-    assert any(photo.endswith(filename) for photo in data["photos"])
+    assert any(photo.endswith(filename) for photo in data["media"]["photos"])
 
 def test_add_media_invalid_format(client, sample_listings):
     """Test adding media with invalid format."""
     listing = sample_listings[0]
     response = client.post(
-        f"/api/v1/listings/{listing.id}/photos",
+        f"/api/v1/listings/{listing.id}/media",
         json={"filename": "invalid_file.txt"},
     )
     assert response.status_code == 400
@@ -138,14 +137,14 @@ def test_add_media_invalid_format(client, sample_listings):
 def test_add_media_missing_file(client, sample_listings):
     """Test adding media with missing filename."""
     listing = sample_listings[0]
-    response = client.post(f"/api/v1/listings/{listing.id}/photos", json={})
+    response = client.post(f"/api/v1/listings/{listing.id}/media", json={})
     assert response.status_code == 400
     assert b"Missing filename" in response.data
 
 def test_add_media_nonexistent_listing(client):
     """Test adding media to a non-existent listing."""
     response = client.post(
-        "/api/v1/listings/nonexistent-id/photos",
+        "/api/v1/listings/nonexistent-id/media",
         json={"filename": "test_image.jpg"},
     )
     assert response.status_code == 404
@@ -153,7 +152,6 @@ def test_add_media_nonexistent_listing(client):
 
 def test_add_media_file_not_found(client, sample_listings, monkeypatch):
     """Test adding media when the file is not found in the media folder."""
-    # Arrange
     listing = sample_listings[0]
 
     # Mock environment variables and file system interactions
@@ -166,13 +164,11 @@ def test_add_media_file_not_found(client, sample_listings, monkeypatch):
 
     monkeypatch.setattr("os.path.exists", mock_exists)
 
-    # Act
     response = client.post(
-        f"/api/v1/listings/{listing.id}/photos",
-        json={"filename": "missing_file.jpg"},  # Provide a filename that doesn't exist
+        f"/api/v1/listings/{listing.id}/media",
+        json={"filename": "missing_file.jpg"},  # Filename that does not exist
     )
 
-    # Assert
-    assert response.status_code == 404  # Expect not found response
-    assert b"File not found" in response.data  # Verify error message
+    assert response.status_code == 404
+    assert b"File not found" in response.data
 
