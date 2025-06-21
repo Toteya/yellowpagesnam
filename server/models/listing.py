@@ -2,9 +2,18 @@
 Directory listing implementation
 """
 from mongoengine import DictField, EmailField, IntField, ListField, PointField, StringField
+from mongoengine.fields import EmbeddedDocument, EmbeddedDocumentField
 from server.models.base import BaseModel
 import os
 import shutil
+
+
+class Media(EmbeddedDocument):
+    """
+    Media model for storing media files related to listings.
+    """
+    photos = ListField(StringField(max_length=255), default=list, required=False)
+    videos = ListField(StringField(max_length=255), default=list, required=False)
 
 
 class Listing(BaseModel):
@@ -31,7 +40,7 @@ class Listing(BaseModel):
     website = StringField(max_length=255, required=False)
     location = PointField(required=False)  # GeoJSON point for location
     phone_numbers = ListField(StringField(max_length=60), required=False)
-    photos = ListField(StringField(max_length=255), required=False)
+    media = EmbeddedDocumentField(Media, default=Media(), required=False)
     likes = IntField(default=0, required=False)
     reviews = ListField(DictField(), default=list, required=False)
 
@@ -53,17 +62,17 @@ class Listing(BaseModel):
             raise FileNotFoundError(f"The directory {media_dirpath} does not exist.")
 
         # check if file exists in the general media folder
-        scr_filepath = f'{media_dirpath}/all/{filename}'
-        if not os.path.exists(scr_filepath):
+        src_filepath = f'{media_dirpath}/all/{filename}'
+        if not os.path.exists(src_filepath):
+            print(f"Error: The file {src_filepath} was not found.")
             raise FileNotFoundError(f"The file {filename} does not exist in the media folder.")
 
-        # copy file to the dedicated folder
+        # create a subfolder for the listing if it doesn't already exist
         if filename.lower().endswith(tuple(accepted_image_formats)):
             type = 'photos'
         else:
             type = 'videos'
  
-        # create a subfolder for the listing if it doesn't already exist
         dst_subfolder = f'{self.id}/{type}'
 
         try:
@@ -72,7 +81,8 @@ class Listing(BaseModel):
             print(f"Error creating directory {media_dirpath}/{dst_subfolder}: {e}")
             raise
         
+        # copy file to the dedicated folder
         dst_filepath = f'{dst_subfolder}/{filename}'
-        shutil.copy(scr_filepath, f'{media_dirpath}/{dst_filepath}')
+        shutil.copy(src_filepath, f'{media_dirpath}/{dst_filepath}')
 
-        self.photos.append(dst_filepath)
+        self.media['photos'].append(dst_filepath)
