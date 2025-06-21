@@ -38,7 +38,9 @@ const ViewPane = ({ currentListing: listing }) => {
               lng={listing.longitude}
             />
           )}
-          <MediaCarousel />
+          {(listing.media?.photos?.length > 0 || listing.media?.videos?.length > 0) && (
+            <MediaCarousel media={listing.media} />
+          )}
         </div>
       ) : (
         <p className="m-2 italic text-gray-500">Select a business for more information</p>

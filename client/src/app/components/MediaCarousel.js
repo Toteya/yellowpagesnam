@@ -1,25 +1,27 @@
 import { useState } from 'react';
 
-const MediaCarousel = () => {
-  const media = [
-    { type: 'image', src: '/media/photos/pic1.jpg' },
-    { type: 'image', src: '/media/photos/pic2.jpg' },
-    { type: 'video', src: '/media/videos/video1.mp4' },
-    { type: 'image', src: '/media/photos/pic3.jpg' },
-    { type: 'video', src: '/media/videos/video2.mp4' },
-  ];
+const MediaCarousel = ({ media }) => {
+  const mediaArray = [
+    ...media.photos.map((photo) => ({ type: 'image', src: `/media/${photo}` })),
+    ...media.videos.map((video) => ({ type: 'video', src: `/media/${video}` })),
+  ]
+
+  // Shuffle the media array (TEMPORARY)
+  const shuffleArray = arr => arr.sort(() => Math.random() - 0.5);
+  // mediaArray = shuffleArray(mediaArray);
+
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? media.length - 1 : prevIndex - 1
+      prevIndex === 0 ? mediaArray.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === media.length - 1 ? 0 : prevIndex + 1
+      prevIndex === mediaArray.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -27,15 +29,15 @@ const MediaCarousel = () => {
     <div className="relative w-full max-w-3xl mx-auto p-4">
       <h2 className="text-lg font-bold mb-4">Photos and Videos</h2>
       <div className="overflow-hidden rounded-lg shadow-lg">
-        {media[currentIndex].type === 'image' ? (
+        {mediaArray[currentIndex].type === 'image' ? (
           <img
-            src={media[currentIndex].src}
+            src={mediaArray[currentIndex].src}
             alt={`Slide ${currentIndex + 1}`}
             className="w-full h-64 object-cover"
           />
         ) : (
           <video
-            src={media[currentIndex].src}
+            src={mediaArray[currentIndex].src}
             controls
             className="w-full h-64 object-cover"
           ></video>
@@ -57,7 +59,7 @@ const MediaCarousel = () => {
       </button>
       {/* Dots Indicator */}
       <div className="flex justify-center space-x-2 mt-4">
-        {media.map((_, index) => (
+        {mediaArray.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
